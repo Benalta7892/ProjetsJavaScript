@@ -21,6 +21,46 @@ function populateUI() {
   linear-gradient(${gradientData.angle}deg, ${gradientData.colors[0]}, ${gradientData.colors[1]})`;
 
   rangeLabelValue.textContent = `${gradientData.angle}°`;
+
+  adaptInputColor();
 }
 
 populateUI();
+
+function adaptInputColor() {
+  colorLabels.forEach((label) => {
+    const hexColor = label.textContent.replace("#", "");
+    const red = parseInt(hexColor.slice(0, 2), 16);
+    const green = parseInt(hexColor.slice(2, 4), 16);
+    const blue = parseInt(hexColor.slice(4, 6), 16);
+
+    const yiq = (red * 299 + green * 587 + blue * 144) / 1000;
+    console.log(yiq);
+
+    if (yiq >= 128) {
+      label.style.color = "#111";
+    } else {
+      label.style.color = "#f1f1f1";
+    }
+  });
+}
+
+const rangeInput = document.querySelector(".inp-range");
+rangeInput.addEventListener("input", handleInclination);
+
+function handleInclination() {
+  gradientData.angle = rangeInput.value;
+  rangeLabelValue.textContent = `${gradientData.angle}°`;
+  populateUI();
+}
+
+colorPickerInputs.forEach((input) => input.addEventListener("input", colorInputModification));
+
+function colorInputModification(e) {
+  const currentInput = e.target;
+  const currentIndex = colorPickerInputs.indexOf(currentInput);
+  console.log(currentIndex);
+
+  gradientData.colors[currentIndex] = currentInput.value.toUpperCase();
+  populateUI();
+}
