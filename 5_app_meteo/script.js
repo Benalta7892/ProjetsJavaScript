@@ -4,11 +4,12 @@ const errorInformation = document.querySelector(".error-information");
 async function getWeatherData(city) {
   try {
     const response = await fetch("http://api.airvisual.com/v2/nearest_city?key=9917d845-3fcd-4066-bee0-a8affebeef38");
-    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}, ${response.statusText}`);
+    }
 
     const responseData = await response.json();
-
-    console.log(responseData);
 
     const sortedData = {
       city: responseData.data.city,
@@ -19,10 +20,14 @@ async function getWeatherData(city) {
     console.log(sortedData);
 
     populateUI(sortedData);
-  } catch (error) {}
+  } catch (error) {
+    loader.classList.remove("active");
+    errorInformation.textContent = error.message;
+  }
 }
 
 getWeatherData();
+// document.querySelector("button").addEventListener("click", getWeatherData);
 
 const cityName = document.querySelector(".city-name");
 const countryName = document.querySelector(".country-name");
