@@ -46,6 +46,8 @@ body {
 }
 
 input[type="color"] {
+  position: absolute;
+  right: 0;
   visibility: hidden;
 }
 
