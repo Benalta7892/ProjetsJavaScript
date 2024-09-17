@@ -17,7 +17,23 @@ async function getWeatherData(city) {
       temperature: responseData.data.current.weather.tp,
     };
     console.log(sortedData);
+
+    populateUI(sortedData);
   } catch (error) {}
 }
 
 getWeatherData();
+
+const cityName = document.querySelector(".city-name");
+const countryName = document.querySelector(".country-name");
+const temperature = document.querySelector(".temperature");
+const infoIcon = document.querySelector(".info-icon");
+
+function populateUI(data) {
+  cityName.textContent = data.city;
+  countryName.textContent = data.country;
+  temperature.textContent = `${data.temperature}°C`;
+  infoIcon.src = `ressources/icons/${data.iconId}.svg`;
+  infoIcon.style.width = "150px";
+  loader.classList.remove("active");
+}
