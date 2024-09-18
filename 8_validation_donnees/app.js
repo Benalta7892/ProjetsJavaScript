@@ -1,16 +1,37 @@
-const validationIcons = document.querySelectorAll(".icone-verif");
-const validationTexts = document.querySelectorAll(".error-verif");
+const inputsValidity = {
+  user: false,
+  email: false,
+  password: false,
+  passwordConfirmation: false,
+};
 
-const userInput = document.querySelector(".input-group:nth-child(1) input");
+const form = document.querySelector("form");
+const container = document.querySelector(".container");
 
-userInput.addEventListener("blur", userValidation);
-userInput.addEventListener("input", userValidation);
+form.addEventListener("submit", handleForm);
 
-function userValidation() {
-  if (userInput.value.length >= 3) {
-    showValidation({ index: 0, validation: true });
+let isAnimating = false;
+function handleForm(e) {
+  e.preventDefault();
+
+  const keys = Object.keys(inputsValidity);
+  const failedInputs = keys.filter((key) => !inputsValidity[key]);
+
+  if (failedInputs.length && !isAnimating) {
+    isAnimating = true;
+    container.classList.add("shake");
+
+    setTimeout(() => {
+      container.classList.remove("shake");
+      isAnimating = false;
+    }, 400);
+
+    failedInputs.forEach((input) => {
+      const index = keys.indexOf(input);
+      showValidation({ index: index, validation: false });
+    });
   } else {
-    showValidation({ index: 0, validation: false });
+    alert("Données envoyées avec succès.");
   }
 }
 
@@ -22,7 +43,25 @@ function showValidation({ index, validation }) {
   } else {
     validationIcons[index].style.display = "inline";
     validationIcons[index].src = "ressources/error.svg";
-    if (validationTexts[index]) validationTexts[index].style.display = "none";
+    if (validationTexts[index]) validationTexts[index].style.display = "block";
+  }
+}
+
+const validationIcons = document.querySelectorAll(".icone-verif");
+const validationTexts = document.querySelectorAll(".error-verif");
+
+const userInput = document.querySelector(".input-group:nth-child(1) input");
+
+userInput.addEventListener("blur", userValidation);
+userInput.addEventListener("input", userValidation);
+
+function userValidation() {
+  if (userInput.value.length >= 3) {
+    showValidation({ index: 0, validation: true });
+    inputsValidity.user = true;
+  } else {
+    showValidation({ index: 0, validation: false });
+    inputsValidity.user = false;
   }
 }
 
@@ -36,8 +75,10 @@ const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 function mailValidation() {
   if (regexEmail.test(mailInput.value)) {
     showValidation({ index: 1, validation: true });
+    inputsValidity.email = true;
   } else {
     showValidation({ index: 1, validation: false });
+    inputsValidity.email = false;
   }
 }
 
@@ -84,8 +125,10 @@ function passwordValidation(e) {
 
   if (validationResult !== 3) {
     showValidation({ index: 2, validation: false });
+    inputsValidity.password = false;
   } else {
     showValidation({ index: 2, validation: true });
+    inputsValidity.password = true;
   }
 
   passwordStrength();
@@ -133,7 +176,9 @@ function confirmPassword() {
     validationIcons[3].style.display = "none";
   } else if (confirmedValue !== passwordValue) {
     showValidation({ index: 3, validation: false });
+    inputsValidity.passwordConfirmation = false;
   } else {
     showValidation({ index: 3, validation: true });
+    inputsValidity.passwordConfirmation = true;
   }
 }

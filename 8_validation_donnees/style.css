@@ -14,13 +14,26 @@ body {
 }
 
 .container {
-  min-width: 600px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 30px;
   background: #212121;
   color: #f1f1f1;
   border-radius: 5px;
   border: 1px solid #ffffffc3;
+}
+
+.container.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  33% {
+    transform: translateX(-5px);
+  }
+  66% {
+    transform: translateX(5px);
+  }
 }
 
 h2 {
@@ -119,7 +132,7 @@ input::placeholder {
 .lines span {
   position: absolute;
   left: 50%;
-  transform: rotateX(-50%);
+  transform: translateX(-50%);
   top: 10px;
 }
 
