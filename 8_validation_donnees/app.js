@@ -87,4 +87,53 @@ function passwordValidation(e) {
   } else {
     showValidation({ index: 2, validation: true });
   }
+
+  passwordStrength();
+}
+
+const lines = document.querySelectorAll(".lines div");
+
+function passwordStrength() {
+  const passwordLength = pswInput.value.length;
+
+  if (!passwordLength) {
+    addLines(0);
+  } else if (passwordLength > 9 && passwordVerification.symbol && passwordVerification.number) {
+    addLines(3);
+  } else if ((passwordLength > 6 && passwordVerification.symbol) || passwordVerification.number) {
+    addLines(2);
+  } else {
+    addLines(1);
+  }
+
+  function addLines(numberOfLines) {
+    lines.forEach((el, index) => {
+      if (index < numberOfLines) {
+        el.style.display = "block";
+      } else {
+        el.style.display = "none";
+      }
+    });
+  }
+
+  if (validationIcons[3].style.display === "inline") {
+    confirmPassword();
+  }
+}
+
+const confirmInput = document.querySelector(".input-group:nth-child(4) input");
+
+confirmInput.addEventListener("blur", confirmPassword);
+confirmInput.addEventListener("input", confirmPassword);
+
+function confirmPassword() {
+  const confirmedValue = confirmInput.value;
+
+  if (!confirmedValue && !passwordValue) {
+    validationIcons[3].style.display = "none";
+  } else if (confirmedValue !== passwordValue) {
+    showValidation({ index: 3, validation: false });
+  } else {
+    showValidation({ index: 3, validation: true });
+  }
 }

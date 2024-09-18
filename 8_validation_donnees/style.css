@@ -89,10 +89,9 @@ input::placeholder {
 .lines {
   width: 80%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 0 auto;
-  display: none;
 }
 
 .l1,
@@ -102,6 +101,7 @@ input::placeholder {
   margin: 15px 5px 20px;
   width: 30%;
   position: relative;
+  display: none;
 }
 
 .l1 {
