@@ -1,5 +1,5 @@
-let workTime = 3;
-let restTime = 3;
+let workTime = 1800;
+let restTime = 300;
 
 function formattedTime(time) {
   return `${Math.trunc(time / 60)}:${time % 60 < 10 ? `${time % 60}` : time % 60}`;
@@ -71,8 +71,8 @@ function handleTicks() {
     displayPause.textContent = formattedTime(restTime);
     handleClassAnimation({ work: false, rest: true });
   } else if (!pause && !workTime && !restTime) {
-    workTime = 3 - 1;
-    restTime = 3;
+    workTime = 1799;
+    restTime = 300;
     displayWork.textContent = formattedTime(workTime);
     displayPause.textContent = formattedTime(restTime);
     handleClassAnimation({ work: true, rest: false });
