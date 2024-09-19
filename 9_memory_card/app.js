@@ -27,4 +27,6 @@ function saveCard(el, value) {
   console.log(cardsPicked);
 }
 
-function result() {}
+function result() {
+  // Verifier si les cartes sont identiques
+}
