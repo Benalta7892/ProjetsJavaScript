@@ -47,7 +47,7 @@ h1 span {
 }
 
 .container {
-  min-width: 950px;
+  max-width: 950px;
   margin: 0 auto;
 }
 
@@ -67,7 +67,7 @@ form input {
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.3);
 }
 
-.card-list {
+.images-list {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -75,7 +75,7 @@ form input {
   margin: 0 auto;
 }
 
-.card-list img {
+.images-list img {
   width: 100%;
   height: 100%;
   object-fit: cover;
