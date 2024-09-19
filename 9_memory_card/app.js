@@ -45,7 +45,21 @@ function result() {
     cardsPicked[1].el.classList.remove("active");
     cardsPicked = [];
     locked = false;
-  }, 3000);
+  }, 1000);
 }
 
-function saveNumberOfTries() {}
+const innerCards = [...document.querySelectorAll(".double-face")];
+const advice = document.querySelector(".advice");
+const score = document.querySelector(".score");
+
+let numberOfTries = 0;
+function saveNumberOfTries() {
+  numberOfTries++;
+  const checkForEnd = innerCards.filter((card) => !card.classList.contains("active"));
+  if (!checkForEnd.length) {
+    advice.textContent = "Bravo ! appuyez sur 'espace' pour relancer une partie";
+    score.textContent = `Votre score final : ${numberOfTries}`;
+    return;
+  }
+  score.textContent = `Nombre de coups : ${numberOfTries}`;
+}
