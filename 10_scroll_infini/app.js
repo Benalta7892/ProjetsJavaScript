@@ -36,3 +36,47 @@ function createImages(data) {
     imagesList.appendChild(newImg);
   });
 }
+
+const observer = new IntersectionObserver(handleIntersect, { rootMargin: "50%" });
+console.log(observer);
+
+observer.observe(document.querySelector(".infinite-marker"));
+
+function handleIntersect(entries) {
+  console.log(entries);
+  if (window.scrollY > window.innerHeight && entries[0].isIntersecting) {
+    pageIndex++;
+    fetchData();
+  }
+}
+
+const input = document.querySelector("#search");
+const form = document.querySelector("form");
+
+form.addEventListener("submit", handleSearch);
+
+function handleSearch(e) {
+  e.preventDefault();
+
+  imagesList.textContent = "";
+  if (!input.value) {
+    errorMsg.textContent = "L'objet de la recherche ne peut etre vide";
+    return;
+  }
+
+  errorMsg.textContent = "";
+  searchQuery = input.value;
+  pageIndex = 1;
+  fetchData();
+}
+
+scrollToTop = document.querySelector(".scroll-to-top");
+
+scrollToTop.addEventListener("click", pushToTop);
+
+function pushToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
