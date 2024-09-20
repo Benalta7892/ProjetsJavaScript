@@ -11,6 +11,8 @@ directionButons.forEach((btn) => btn.addEventListener("click", handleClick));
 
 function handleClick(e) {
   getDirection(e.target);
+
+  slideOut();
 }
 
 function getDirection(btn) {
@@ -24,5 +26,34 @@ function getDirection(btn) {
     sliderData.slideInIndex = slides.length - 1;
   } else {
     sliderData.slideInIndex = sliderData.slideOutIndex + sliderData.direction;
+  }
+}
+
+function slideOut() {
+  slideAnimation({
+    el: slides[sliderData.slideInIndex],
+    props: {
+      display: "flex",
+      transform: `translateX(${sliderData.direction < 0 ? "100%" : "-100%"})`,
+      opacity: 0,
+    },
+  });
+
+  slideAnimation({
+    el: slides[sliderData.slideOutIndex],
+    props: {
+      transition: `transform 0.4s cubic-bezier(0.74, -0.34, 1, 1.19),
+      opacity 0.4s ease-out`,
+      transform: `translateX(${sliderData.direction < 0 ? "-100%" : "100%"})`,
+      opacity: 0,
+    },
+  });
+
+  slides[sliderData.slideOutIndex].addEventListener("transitionend", slideIn);
+}
+
+function slideAnimation(animationObject) {
+  for (const prop in animationObject.props) {
+    animationObject.el.style[prop] = animationObject.props[prop];
   }
 }
