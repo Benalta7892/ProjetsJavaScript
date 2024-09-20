@@ -1,6 +1,7 @@
 const slides = [...document.querySelectorAll(".slide")];
 
 const sliderData = {
+  locked: false,
   direction: 0,
   slideOutIndex: 0,
   slideInIndex: 0,
@@ -10,6 +11,9 @@ const directionButons = document.querySelectorAll(".direction-btn");
 directionButons.forEach((btn) => btn.addEventListener("click", handleClick));
 
 function handleClick(e) {
+  if (sliderData.locked) return;
+  sliderData.locked = true;
+
   getDirection(e.target);
 
   slideOut();
@@ -56,4 +60,24 @@ function slideAnimation(animationObject) {
   for (const prop in animationObject.props) {
     animationObject.el.style[prop] = animationObject.props[prop];
   }
+}
+
+function slideIn(e) {
+  slideAnimation({
+    el: slides[sliderData.slideInIndex],
+    props: {
+      transition: `trnasform 0.4s ease-out, opacity 0.8s ease-out`,
+      transform: "translateX(0%)",
+      opacity: 1,
+    },
+  });
+  slides[sliderData.slideInIndex].classList.add("active");
+
+  slides[sliderData.slideOutIndex].classList.remove("active");
+  e.target.removeEventListener("transitionend", slideIn);
+  slides[sliderData.slideOutIndex].style.display = "none";
+
+  setTimeout(() => {
+    sliderData.locked = false;
+  }, 400);
 }
