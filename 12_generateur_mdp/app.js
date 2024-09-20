@@ -26,11 +26,17 @@ const charactersSet = {
   symbols: addASet(33, 47) + addASet(58, 64) + addASet(91, 96) + addASet(123, 126),
 };
 
+const range = document.querySelector("input[type='range']");
+const rangeLabel = document.querySelector(".range-group label");
+
+rangeLabel.textContent = `Taille du mot de passe : ${range.value}`;
+let passwordLength = range.value;
+
 const passwordContent = document.querySelector(".password-content");
 const errorMsg = document.querySelector(".error-msg");
 const generateBtn = document.querySelector(".generate-password-btn");
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
-let passwordLength = 10;
+
 generateBtn.addEventListener("click", createPassword);
 
 function createPassword() {
@@ -45,21 +51,24 @@ function createPassword() {
 
   let password = "";
 
+  // Caractere de base
   let passwordBase = [];
   for (let i = 0; i < checkedDataSets.length; i++) {
     passwordBase.push(checkedDataSets[i][getRandomNumber(0, checkedDataSets[i].length - 1)]);
   }
 
+  // Caractere restant
   for (let i = checkedDataSets.length; i < passwordLength; i++) {
     password += concatenatedDataSet[getRandomNumber(0, concatenatedDataSet.length - 1)];
   }
 
+  // Insertion des caractères de base
   passwordBase.forEach((item, index) => {
     const randomIndex = getRandomNumber(0, password.length);
-    // Pour insérer un élément dans un tableau à un index donné
     password = password.slice(0, randomIndex) + passwordBase[index] + password.slice(randomIndex);
   });
-  console.log(password);
+
+  passwordContent.textContent = password;
 }
 createPassword();
 
@@ -71,3 +80,28 @@ function checkedSets() {
 }
 
 console.log(checkedSets());
+
+range.addEventListener("input", handleRange);
+
+function handleRange(e) {
+  passwordLength = e.target.value;
+  rangeLabel.textContent = `Taille du mot de passe : ${passwordLength}`;
+}
+
+const copyBtn = document.querySelector(".copy-btn");
+copyBtn.addEventListener("click", copyPassword);
+
+let locked = false;
+function copyPassword() {
+  navigator.clipboard.writeText(passwordContent.textContent);
+
+  if (!locked) {
+    copyBtn.classList.add("active");
+    locked = true;
+
+    setTimeout(() => {
+      copyBtn.classList.remove("active");
+      locked = false;
+    }, 600);
+  }
+}
