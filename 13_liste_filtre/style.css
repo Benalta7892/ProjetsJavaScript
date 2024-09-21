@@ -75,11 +75,14 @@ body {
 
 .input-control {
   max-width: 450px;
-  /* padding: 15px; */
   display: flex;
   align-items: center;
   background: #f4f4f4;
   border-radius: 6px;
+}
+
+.input-control:focus-within {
+  outline: 1px solid #333;
 }
 
 .input-control img {
