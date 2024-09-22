@@ -39,12 +39,19 @@ video {
 }
 
 .controls {
+  will-change: transform;
   position: absolute;
   left: 0;
   bottom: 0;
-  background: #111;
   width: 100%;
+  background: #111;
+  transform: translateY(calc(100% - 8px));
+  transition: transform 0.2s ease-out;
   cursor: auto;
+}
+
+.video-container:hover .controls {
+  transform: translateY(0%);
 }
 
 .progress-bar {
@@ -65,7 +72,7 @@ video {
 
 .controls-container {
   display: flex;
-  align-self: center;
+  align-items: center;
   padding: 15px 20px;
 }
 
