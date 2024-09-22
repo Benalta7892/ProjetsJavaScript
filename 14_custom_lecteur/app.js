@@ -88,7 +88,7 @@ function handleMute() {
 
 const volumeSlider = document.querySelector(".volume-slider");
 
-volumeSlider.addEventListener("change", handleVolumeModification);
+volumeSlider.addEventListener("input", handleVolumeModification);
 
 function handleVolumeModification() {
   video.volume = volumeSlider.value / 100;
@@ -97,5 +97,40 @@ function handleVolumeModification() {
     muteIcon.src = "ressources/mute.svg";
   } else {
     muteIcon.src = "ressources/unmute.svg";
+  }
+}
+
+const progressBar = document.querySelector(".progress-bar");
+
+let rect = progressBar.getBoundingClientRect();
+let largeur = rect.width;
+window.addEventListener("resize", handleResize);
+
+function handleResize() {
+  rect = progressBar.getBoundingClientRect();
+  largeur = rect.width;
+}
+
+progressBar.addEventListener("click", handleProgressNavigation);
+
+function handleProgressNavigation(e) {
+  const x = e.clientX - rect.left;
+
+  const widthPercent = x / largeur;
+
+  video.currentTime = video.duration * widthPercent;
+}
+
+const fullScreenToggler = document.querySelector(".fullscreen-toggler");
+const videoContainer = document.querySelector(".video-container");
+
+video.addEventListener("dblclick", toggleFullScreen);
+fullScreenToggler.addEventListener("click", toggleFullScreen);
+
+function toggleFullScreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    videoContainer.requestFullscreen();
   }
 }
