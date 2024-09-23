@@ -1,5 +1,6 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+const speedFactor = 0.4;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -28,8 +29,8 @@ class Particle {
     } else if (this.y > canvas.height || this.y < 0) {
       this.directionY = -this.directionY;
     }
-    this.x += this.diretionX;
-    this.y += this.directionY;
+    this.x += this.diretionX * speedFactor;
+    this.y += this.directionY * speedFactor;
     this.draw();
   }
 }
