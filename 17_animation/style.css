@@ -6,8 +6,124 @@
   margin: 0;
 }
 
+/* html {
+  cursor: none;
+}
+
+a,
+button,
+input,
+label,
+textarea,
+img {
+  cursor: none;
+} */
 
 body {
   font-family: Montserrat, Helvetica, sans-serif;
   background: #111;
+}
+
+/* .custom-cursor {
+
+} */
+
+nav {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+nav a {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-size: clamp(14px, 2vw, 20px);
+  margin: 0 15px;
+  position: relative;
+}
+
+nav a::before {
+  content: "";
+  display: block;
+  position: absolute;
+  background: #6f6f6fd0;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  transform-origin: left;
+  transform: scaleX(33%);
+  transition: transform 0.2s ease-out;
+}
+
+nav a:hover::before {
+  transform: scaleX(100%);
+  background: #f1f1f1;
+}
+
+.hero {
+  height: 100vh;
+  min-height: 700px;
+  border-bottom: 1px solid #f1f1f124;
+  text-align: center;
+  padding-top: 150px;
+  position: relative;
+  background: url(ressources/hero-background.jpg);
+  background-position: center;
+}
+
+h1 {
+  font-size: clamp(24px, 8vw, 80px);
+  display: inline-block;
+  font-weight: 800;
+  color: #f0f0f0;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right, #999, #fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  position: relative;
+}
+
+.subtitle {
+  font-family: Raleway;
+  color: #f1f1f1;
+  font-weight: 200;
+  font-size: clamp(16px, 2vw, 20px);
+  margin-top: 10px;
+}
+
+.hero-push-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #f1f1f136;
+  background: #111;
+  bottom: clamp(30px, 7.5vw, 75px);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hero-push-link img {
+  width: 30%;
+  pointer-events: none;
+}
+
+@media (max-width: 1000px) {
+  .hero {
+    min-height: 600px;
+    height: auto;
+  }
+}
+
+img {
+  width: 20px;
 }
