@@ -36,3 +36,47 @@ class Particle {
 
 const particle1 = new Particle(10, 10, 50, 55, 2, "#f1f1f1");
 console.log(particle1);
+
+let particlesArray;
+
+function init() {
+  particlesArray = [];
+
+  const numberOfParticles = (canvas.height * canvas.width) / 7000;
+
+  for (let i = 0; i < numberOfParticles; i++) {
+    //[1, 3[ donc on veut des valeurs entre 1 et 2 donc on ajoute 1
+    const size = Math.random() * 2 + 1;
+    // return Math.random() * (max - min + 1) + min;
+    const x = Math.random() * (innerWidth - 10 - 10 + 1) + 10;
+    const y = Math.random() * (innerHeight - 10 - 10 + 1) + 10;
+
+    const directionX = cleanDirection();
+    const directionY = cleanDirection();
+    particlesArray.push(new Particle(x, y, directionX, directionY, size, "#f1f1f1"));
+  }
+}
+
+init();
+
+function cleanDirection() {
+  // 0 ou 1
+  const random = Math.trunc(Math.random() * 2);
+  if (random) {
+    // de 0.5 à 1.5 non inclus, non trunc (avec des décimales) [0.5, 1.5[
+    return Math.random() * 1 + 0.5;
+  } else {
+    // de -0.5 à -1.5 non inclus, non trunc (avec des décimales) ]-1.5, -0.5]
+    return Math.random() * -1 + -0.5;
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  for (let i = 0; i < particlesArray.length; i++) {
+    particlesArray[i].update();
+  }
+  requestAnimationFrame(animate);
+}
+
+animate();
