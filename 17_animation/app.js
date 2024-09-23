@@ -25,3 +25,44 @@ function typeWriter(text, index) {
 setTimeout(() => {
   typeWriter(txt, 0);
 }, 300);
+
+// push down button
+heroPushLink.addEventListener("click", slideDown);
+
+function slideDown(e) {
+  e.preventDefault();
+  window.scrollTo({
+    top: document.querySelector(`${e.target.getAttribute("href")}`).offsetTop,
+    behavior: "smooth",
+  });
+  // document.querySelector(`${e.target.getAttribute("href")}`).scrollIntoView({ behavior: "smooth" });
+  // La methode scrollIntoView alternative mais ce n'ai pas encore supporté par tous les navigateurs
+}
+
+// Scroll animations
+
+const generalAnimatedElements = [...document.querySelectorAll("h2"), ...document.querySelectorAll(".section-subtitle")];
+
+const discoverSectionElements = [
+  document.querySelector(".text-discover-content h3"),
+  document.querySelector(".text-discover-content p"),
+  document.querySelector(".discover-link"),
+  document.querySelector(".discover-main-img"),
+];
+
+const slideInContent = [...document.querySelectorAll(".side-apparition-container")];
+
+const animatedContent = [...generalAnimatedElements, ...discoverSectionElements, ...slideInContent];
+
+const intersectionObserver = new IntersectionObserver(handleintersect, { rootMargin: "-10%" });
+
+animatedContent.forEach((el) => intersectionObserver.observe(el));
+
+function handleintersect(entries) {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("active");
+      intersectionObserver.unobserve(entry.target);
+    }
+  });
+}
