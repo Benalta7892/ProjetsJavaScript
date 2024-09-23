@@ -42,7 +42,7 @@ let particlesArray;
 function init() {
   particlesArray = [];
 
-  const numberOfParticles = (canvas.height * canvas.width) / 7000;
+  const numberOfParticles = (canvas.height * canvas.width) / 4000;
 
   for (let i = 0; i < numberOfParticles; i++) {
     //[1, 3[ donc on veut des valeurs entre 1 et 2 donc on ajoute 1
@@ -76,7 +76,40 @@ function animate() {
   for (let i = 0; i < particlesArray.length; i++) {
     particlesArray[i].update();
   }
+  connect();
+
   requestAnimationFrame(animate);
 }
 
 animate();
+
+function connect() {
+  for (let i = 0; i < particlesArray.length; i++) {
+    for (let j = i + 1; j < particlesArray.length; j++) {
+      const squaredDistanceX =
+        (particlesArray[i].x - particlesArray[j].x) * (particlesArray[i].x - particlesArray[j].x);
+      const squaredDistanceY =
+        (particlesArray[i].y - particlesArray[j].y) * (particlesArray[i].y - particlesArray[j].y);
+
+      const hypothenuse = squaredDistanceX + squaredDistanceY;
+
+      if (hypothenuse < 135 * 135) {
+        // Plus la distance est petite, plus la couleur est foncée
+        ctx.strokeStyle = `rgba(240, 240, 240, ${1 - hypothenuse / (135 * 135)})`;
+        ctx.lineWidth = 0.4;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+window.addEventListener("resize", handleResize);
+
+function handleResize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+}
