@@ -91,3 +91,14 @@ body {
   content: " ➡️ ";
   padding-right: 5px;
 }
+
+.correct {
+  color: #000;
+  background: #0ecf0e;
+}
+
+.wrong {
+  color: #fff;
+  background: crimson;
+  text-decoration: none;
+}

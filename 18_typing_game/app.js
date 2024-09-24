@@ -20,7 +20,9 @@ async function getNewSentence() {
       sentence.appendChild(spanCharacter);
     });
 
-    spansFromAPISentence = sentence.querySelectorAll("sentence-to-write span");
+    spansFromAPISentence = sentence.querySelectorAll(".sentence-to-write span");
+
+    textareaToTest.value = "";
   } catch (error) {
     console.log(error);
   }
@@ -35,6 +37,7 @@ window.addEventListener("keydown", handleStart);
 
 let time = 60;
 let score = 0;
+let timerID;
 
 function handleStart(e) {
   if (e.key === "Escape") {
@@ -56,7 +59,63 @@ function handleStart(e) {
 }
 
 function handleTyping(e) {
-  const checkedSpans = checkSpans();
+  if (!timerID) startTimer();
+
+  const completedSentence = checkSpans();
+
+  if (completedSentence) {
+    getNewSentence();
+    score += spansFromAPISentence.length;
+    scoreDisplayed.textContent = `Score : ${score}`;
+  }
 }
 
-function checkSpans() {}
+function startTimer() {
+  time--;
+  timeDisplayed.textContent = `Temps : ${time}`;
+
+  timerID = setInterval(handleTime, 1000);
+}
+
+function handleTime() {
+  time--;
+  timeDisplayed.textContent = `Temps : ${time}`;
+
+  if (time === 0) {
+    clearInterval(timerID);
+
+    timeDisplayed.classList.remove("active");
+    textareaToTest.classList.remove("active");
+
+    const spansFromAPISentence = sentence.querySelectorAll("span");
+    spansFromAPISentence.forEach((span) => (span.classList.contains("correct") ? score++ : ""));
+
+    scoreDisplayed.textContent = `Score : ${score}`;
+    textareaToTest.removeEventListener("input", handleTyping);
+  }
+}
+
+function checkSpans() {
+  const textareaCharactersArray = textareaToTest.value.split("");
+  let completedSentence = true;
+  let currentGoodLetters = 0;
+
+  for (let i = 0; i < spansFromAPISentence.length; i++) {
+    if (textareaCharactersArray[i] === undefined) {
+      spansFromAPISentence[i].className = "";
+      completedSentence = false;
+    } else if (textareaCharactersArray[i] === spansFromAPISentence[i].textContent) {
+      spansFromAPISentence[i].classList.remove("wrong");
+      spansFromAPISentence[i].classList.add("correct");
+      currentGoodLetters++;
+    } else {
+      spansFromAPISentence[i].classList.remove("correct");
+      spansFromAPISentence[i].classList.add("wrong");
+      completedSentence = false;
+    }
+  }
+
+  scoreDisplayed.textContent = `Score : ${score + currentGoodLetters}`;
+
+  return completedSentence;
+}
