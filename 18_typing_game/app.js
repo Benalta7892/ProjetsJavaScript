@@ -23,8 +23,9 @@ async function getNewSentence() {
     spansFromAPISentence = sentence.querySelectorAll(".sentence-to-write span");
 
     textareaToTest.value = "";
+    locked = false;
   } catch (error) {
-    console.log(error);
+    sentence.textContent = error;
   }
 }
 
@@ -35,17 +36,24 @@ const scoreDisplayed = document.querySelector(".score");
 
 window.addEventListener("keydown", handleStart);
 
-let time = 60;
-let score = 0;
+let time;
+let score;
 let timerID;
 
 function handleStart(e) {
+  if (!sentence.textContent) sentence.textContent = "Attendez l'arrivée de la phrase...";
+
   if (e.key === "Escape") {
+    if (timerID) {
+      clearInterval(timerID);
+      timerID = undefined;
+    }
+
     time = 60;
     score = 0;
 
     timeDisplayed.classList.add("active");
-    scoreDisplayed.classList.add("active");
+    textareaToTest.classList.add("active");
 
     timeDisplayed.textContent = `Temps : ${time}`;
     scoreDisplayed.textContent = `Score : ${score}`;
@@ -58,12 +66,17 @@ function handleStart(e) {
   }
 }
 
+let locked = false;
+
 function handleTyping(e) {
+  if (locked) return;
+
   if (!timerID) startTimer();
 
   const completedSentence = checkSpans();
 
   if (completedSentence) {
+    locked = true;
     getNewSentence();
     score += spansFromAPISentence.length;
     scoreDisplayed.textContent = `Score : ${score}`;
