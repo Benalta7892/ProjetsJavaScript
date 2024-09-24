@@ -7,11 +7,87 @@
 }
 
 body {
-  background: linear-gradient(
-    to right,
-    #f09819,
-    #edde5d
-  );
+  background: linear-gradient(to right, #f09819, #edde5d);
   font-family: Roboto, Helvetica, sans-serif;
   padding: 50px 10px;
+}
+
+.container {
+  padding: 35px;
+  background: #111;
+  color: #f1f1f1;
+  border-radius: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.top-content {
+  text-align: center;
+}
+
+.start-info {
+  margin: 10px;
+}
+
+.start-info span {
+  padding: 5px;
+  background: crimson;
+  border-radius: 3px;
+}
+
+.score-information {
+  margin: 40px 0 75px;
+  display: flex;
+  justify-content: center;
+}
+
+.score-information p {
+  font-family: Open sans, sans-serif;
+  color: #f1f1f1;
+  background: linear-gradient(45deg, #131313, #2f2f2f);
+  padding: 10px 5px;
+  min-width: 150px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.score-information p:nth-child(2) {
+  background: linear-gradient(-45deg, #131313, #2f2f2f);
+}
+
+.score {
+  margin-left: 20px;
+}
+
+.text-to-test {
+  font-family: Roboto, sans-serif;
+  background-color: transparent;
+  border: 2px solid #333;
+  font-size: 30px;
+  color: #f1f1f1;
+  width: 100%;
+  min-height: 200px;
+  resize: none;
+  outline: none;
+  padding: 20px;
+}
+
+.text-to-test:focus {
+  border: 2px solid #6a6a6a;
+}
+
+.text-to-test.active {
+  border: 1px solid greenyellow;
+}
+
+.sentence-to-write {
+  margin: 10px 0 40px;
+  font-size: 25px;
+  min-height: 100px;
+  position: relative;
+}
+
+.sentence-to-write::before {
+  content: " ➡️ ";
+  padding-right: 5px;
 }
