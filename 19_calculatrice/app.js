@@ -83,11 +83,13 @@ function handleEqualBtn() {
     return;
   } else if (!calculatorData.displayedResults) {
     calculatorData.result = customEval(calculatorData.calculation);
+    resultDisplay.textContent = calculatorData.result;
+    calculationDisplay.textContent = calculatorData.calculation;
+    calculatorData.displayedResults = true;
   }
 }
 
-customEval("5500+10");
-
+// console.log(customEval("11/2"));
 // Fonction pour evaluer le calcul
 function customEval(calculation) {
   if (!/[\/+*-]/.test(calculation.slice(1))) return calculation;
@@ -113,22 +115,60 @@ function customEval(calculation) {
       }
     }
   }
-  const operands = getIndexes(operatorIndex, calculation);
-  console.log(operands);
+  const operandsInfo = getIndexes(operatorIndex, calculation);
+  console.log(operandsInfo);
+
+  let currentCalculationResult;
+
+  switch (operator) {
+    case "+":
+      currentCalculationResult = Number(operandsInfo.leftOperand) + Number(operandsInfo.rightOperand);
+      break;
+    case "-":
+      currentCalculationResult = Number(operandsInfo.leftOperand) - Number(operandsInfo.rightOperand);
+      break;
+    case "*":
+      currentCalculationResult = Number(operandsInfo.leftOperand) * Number(operandsInfo.rightOperand);
+      break;
+    case "/":
+      currentCalculationResult = Number(operandsInfo.leftOperand) / Number(operandsInfo.rightOperand);
+      break;
+  }
+
+  let updatedCalculation = calculation.replace(
+    calculation.slice(operandsInfo.startIntervalIndex, operandsInfo.lastRightOperandCharacter),
+    currentCalculationResult.toString()
+  );
+
+  if (/[\/+*-]/.test(updatedCalculation.slice(1))) {
+    customEval(updatedCalculation);
+  }
+
+  console.log(updatedCalculation.split("."));
+
+  if (updatedCalculation.includes(".")) {
+    if (updatedCalculation.split(".")[1].length === 1) {
+      return Number(updatedCalculation).toString();
+    } else if (updatedCalculation.split(".")[1].length > 1) {
+      return Number(updatedCalculation).toFixed(2).toString();
+    }
+  } else {
+    return updatedCalculation;
+  }
 }
 
 // Fonction pour recuperer les index des operandes
 // 5500 * 50
 function getIndexes(operatorIndex, calculation) {
   let rightOperand = "";
-  let endIntervalIndex;
+  let lastRightOperandCharacter;
 
   for (let i = operatorIndex + 1; i <= calculation.length; i++) {
     if (i === calculation.length) {
-      endIntervalIndex = calculation.length;
+      lastRightOperandCharacter = calculation.length;
       break;
     } else if (/[\/+*-]/.test(calculation[i])) {
-      endIntervalIndex = i;
+      lastRightOperandCharacter = i;
       break;
     } else {
       rightOperand += calculation[i];
@@ -161,6 +201,6 @@ function getIndexes(operatorIndex, calculation) {
     leftOperand,
     rightOperand,
     startIntervalIndex,
-    endIntervalIndex,
+    lastRightOperandCharacter,
   };
 }
