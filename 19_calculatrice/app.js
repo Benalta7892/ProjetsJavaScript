@@ -16,8 +16,14 @@ const resultDisplay = document.querySelector(".result");
 function handleDigits(e) {
   const buttonValue = e.target.getAttribute("data-action");
 
-  // Pour gerer le cas ou le premier chiffre est 0 pour ne pas l'afficher dans le calcul
-  if (calculatorData.calculation === "0") calculatorData.calculation = "";
+  if (calculatorData.displayedResults) {
+    calculatorData.textContent = "";
+    calculatorData.calculation = "";
+    calculatorData.displayedResults = false;
+  } else if (calculatorData.calculation === "0") {
+    // Pour gerer le cas ou le premier chiffre est 0 pour ne pas l'afficher dans le calcul
+    calculatorData.calculation = "";
+  }
 
   //  Pour gerer le cas ou le resultat est affiché et on veut continuer le calcul
   calculatorData.calculation += buttonValue;
@@ -32,16 +38,22 @@ operatorsBtns.forEach((btn) => btn.addEventListener("click", handleOperators));
 function handleOperators(e) {
   const buttonValue = e.target.getAttribute("data-action");
 
-  if (!calculatorData.calculation && buttonValue === "-") {
+  if (calculatorData.displayedResults) {
+    calculationDisplay.textContent = "";
+    calculatorData.calculation = calculatorData.result += buttonValue;
+    resultDisplay.textContent = calculatorData.calculation;
+    calculatorData.displayedResults = false;
+    return;
+  } else if (!calculatorData.calculation && buttonValue === "-") {
     calculatorData.calculation += buttonValue;
     resultDisplay.textContent = calculatorData.calculation;
     return;
   } else if (!calculatorData.calculation) {
     return;
-  } else if (calculatorData.calculation.slice(-1).match(/[\/+*-]/)) {
+  } else if (calculatorData.calculation.slice(-1).match(/[\/+*-]/) && calculatorData.calculation.length !== 1) {
     calculatorData.calculation = calculatorData.calculation.slice(0, -1) + buttonValue;
     resultDisplay.textContent = calculatorData.calculation;
-  } else {
+  } else if (calculatorData.calculation.length !== 1) {
     calculatorData.calculation += buttonValue;
     resultDisplay.textContent = calculatorData.calculation;
   }
@@ -203,4 +215,33 @@ function getIndexes(operatorIndex, calculation) {
     startIntervalIndex,
     lastRightOperandCharacter,
   };
+}
+
+const resetButton = document.querySelector("[data-action='c']");
+
+resetButton.addEventListener("click", reset);
+
+function reset() {
+  calculatorData.calculation = "";
+  calculatorData.displayedResults = false;
+  calculatorData.result = "";
+  resultDisplay.textContent = "0";
+  calculationDisplay.textContent = "";
+}
+
+const clearEntryButton = document.querySelector("[data-action='ce']");
+
+clearEntryButton.addEventListener("click", clearEntry);
+
+function clearEntry() {
+  if (!calculatorData.displayedResults) {
+    if (resultDisplay.textContent[0] === "0") {
+      return;
+    } else if (resultDisplay.textContent.length === 1) {
+      calculatorData.calculation = "0";
+    } else {
+      calculatorData.calculation = calculatorData.calculation.slice(0, -1);
+    }
+    resultDisplay.textContent = calculatorData.calculation;
+  }
 }
