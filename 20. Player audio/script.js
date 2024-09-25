@@ -82,3 +82,60 @@ function updateProgress(e) {
   const progressValue = current / totalDuration;
   progressBar.style.transform = `scaleX(${progressValue})`;
 }
+
+const musicTrack = document.querySelector("audio");
+
+const progressBarContainer = document.querySelector(".progress-container");
+
+progressBarContainer.addEventListener("click", setProgress);
+
+let rect = progressBarContainer.getBoundingClientRect();
+let width = rect.width;
+
+function setProgress(e) {
+  const x = e.clientX - rect.left;
+
+  musicPlayer.currentTime = (x / width) * totalDuration;
+}
+
+const btnShuffle = document.querySelector(".shuffle");
+btnShuffle.addEventListener("click", switchShuffle);
+
+let shuffle = false;
+function switchShuffle() {
+  btnShuffle.classList.toggle("active");
+  shuffle = !shuffle;
+}
+
+const nextBtn = document.querySelector(".next-btn");
+const prevBtn = document.querySelector(".prev-btn");
+
+[prevBtn, nextBtn].forEach((btn) => btn.addEventListener("click", changeSong));
+musicPlayer.addEventListener("ended", changeSong);
+
+function changeSong(e) {
+  if (shuffle) {
+    playAShuffledSong();
+    return;
+  }
+
+  e.target.classList.contains("next-btn") || e.type === "ended" ? currentMusicIndex++ : currentMusicIndex--;
+
+  if (currentMusicIndex < 1) {
+    currentMusicIndex = musicsData.length;
+  } else if (currentMusicIndex > musicsData.length) {
+    currentMusicIndex = 1;
+  }
+
+  populateUI(musicsData[currentMusicIndex - 1]);
+  play();
+}
+
+function playAShuffledSong() {
+  const musicWithoutCurrentSong = musicsData.filter((el) => el.id !== currentMusicIndex);
+  const randomMusic = musicWithoutCurrentSong[Math.floor(Math.random() * musicWithoutCurrentSong.length)];
+
+  currentMusicIndex = randomMusic.id;
+  populateUI(randomMusic);
+  play();
+}
